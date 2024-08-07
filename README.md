@@ -29,6 +29,10 @@ Multithreading and concurrency are essential concepts in software development, e
 
 ![image](https://github.com/user-attachments/assets/e9ea70a1-02b1-4b95-9e57-c4a0cf34eb94)
 
+- Morre's law - as the transistors get closer and closer - more heat is generated.
+- 
+
+![image](https://github.com/user-attachments/assets/4043f703-38ee-4eb1-8075-d5fda5242159)
 
 
 
