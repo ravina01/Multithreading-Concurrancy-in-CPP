@@ -124,3 +124,148 @@ solutions - launch all threads as soon as possible with different ids and then w
 ![image](https://github.com/user-attachments/assets/b0586e4c-797a-403e-8b87-5b46b00d4441)
 
 ---
+Lets Revise -
+
+#### 1. Multithreading -
+- multiple threads executing within a context of a single process, sharing the same resource but running independently
+- thread - smallest unit of execution, light weight process
+- Concurrency: The ability to run multiple tasks or processes simultaneously
+- Parallelism: A subset of concurrency where tasks are executed literally at the same time, often on multiple processors or cores.
+
+1. Creating Threads: Using libraries (like pthreads in C/C++ or std::thread in C++11) to create and manage threads.
+2. Thread Synchronization: Using mechanisms like mutexes, semaphores, and condition variables to coordinate access to shared resources and prevent race conditions.
+
+
+##### Thread Safety
+1. Race Conditions: Occur when two or more threads access shared data simultaneously, leading to unpredictable results. Preventing race conditions is crucial.
+2. Atomic Operations: Ensuring that a sequence of operations on shared data is indivisible, typically achieved using atomic variables and operations.
+3. Locks: Using mutexes and locks to ensure only one thread can access a critical section at a time.
+
+##### Synchronization Mechanisms
+- Mutex (Mutual Exclusion): A lock that ensures only one thread can access a resource at a time.
+- Condition Variable: Used to block a thread until a particular condition is met, often used in conjunction with a mutex.
+- Deadlock: A situation where two or more threads are waiting indefinitely for resources held by each other.
+
+
+#### Q&A
+- 
+1. What is the difference between concurrency and parallelism?
+- Concurrency: The ability to manage multiple tasks at the same time by interleaving their execution. It gives the illusion of simultaneous execution.
+- Parallelism: The actual simultaneous execution of multiple tasks, typically using multiple processors or cores.
+
+2. How do you prevent race conditions in a multithreaded environment?
+- Locks/Mutexes: Ensure only one thread accesses a critical section at a time.
+- Atomic Operations: Use atomic variables and operations to perform indivisible actions.
+- Synchronization Mechanisms: Employ semaphores, condition variables, and barriers to coordinate thread access to shared resources.
+
+3. Explain the concept of deadlock and how you can avoid it.
+Deadlock: A situation where two or more threads are waiting indefinitely for resources held by each other, causing the system to halt.
+Avoidance
+Techniques: gaurd lock, scoped lock ?
+Lock Ordering: Always acquire locks in a consistent global order.
+Timeouts: Implement timeouts for lock acquisition.
+Deadlock Detection: Use algorithms to detect and resolve deadlocks dynamically.
+
+
+condition variable -
+- allows you to wait on some conditions and once those conditions are met the waiting thread is notified.
+- notify other threads - notify_one() and notify_all()
+- waiting for some conditions
+- need mutex to use condition variable.
+- if some thread want to wait on some condition then it has to do below things
+- acquire the mutex lock using std::unique_lock<std::mutex> lock(m)
+- Execute wait, wait for / wait until. wait operation automatically releases mutex
+- when condition_var is notified, thread is awakened.
+- the thread should check condition and resume waiting if the wake up was spurious.
+  
+---
+
+## My Work at Motorola solutions ->
+- Goal was to build VAL5 - Video Analytics Library
+- to process a decoded video stream at a specified frame rate, returning metadata at the same frame rate.
+
+#### Principles of VAL  
+1. parallel execution - Utilize parallel processing to handle video frames concurrently, leveraging multiple threads or cores to speed up the analysis.
+2. Extensibility - Design the system in a modular way where new analytics modules can be integrated seamlessly without significant changes to the existing architecture.
+3. Class encapsulation - Encapsulate functionality within classes, promoting clean interfaces and making the codebase easier to understand and maintain.
+
+#### Assemblies and Datablocks
+- Example: Object detection and PTZ auto-tracking assembly
+- Datablocks:
+- Definition: Thread-safe containers of elements used for data communication between concurrent modules.
+- Types:
+1. Timestamp-based: Keyed by timestamp (e.g., frame pyramids).
+2. ID-based: Keyed by an integer (e.g., tracked targets).
+
+#### Application Example: Object Detection and PTZ Auto Tracking
+- Assemblies: Combine different analytics modules like human, gun, and backpack classifiers.
+- Flow Graph: Manages the parallel processing of video frames and communication between these classifiers.
+- Datablocks: Used to store and manage the results from different classifiers, ensuring thread-safe access and modification.
+
+
+#### Detailed Explanation of H6A Features and Workflow
+The H6A system is designed with several advanced features to detect and analyze various objects and events within a video stream. Here’s a detailed breakdown of its features, object detection workflow, and the role of qualifiers:
+
+##### Features of H6A
+1. Crowd Detection:
+- Identifies and analyzes groups of people within the video frame.
+- Useful for monitoring large gatherings, ensuring safety, and managing events.
+
+2. Privacy Masking:
+- Masks sensitive areas or individuals to protect privacy.
+- Often used in surveillance systems to comply with privacy regulations.
+
+3.Facets:
+- Analyzes faces to determine attributes such as age and gender.
+- Enhances person detection by adding demographic information.
+  
+4. License Plate Recognition:
+- Detects and reads vehicle license plates.
+- Useful for traffic monitoring, law enforcement, and access control.
+
+5.Gun Detection:
+- Identifies firearms within the video frame.
+- Crucial for security and surveillance applications to detect potential threats.
+
+Running on Every Frame:
+Qualifiers are executed for each frame to ensure real-time analysis and accurate metadata generation.
+
+#### I used to resolve/diagnose core dumped issues
+1. Memory Management Errors:
+- Occur when the program tries to access memory that it is not allowed to. This can be due to dereferencing null or invalid pointers, accessing out-of-bounds array elements, or using freed memory.
+
+2. Concurrency Issues:
+- Race Conditions: Happen when two or more threads access shared data simultaneously, and at least one thread modifies it. This can lead to inconsistent or unexpected behavior.
+- Deadlocks: Occur when two or more threads are waiting for each other to release resources, causing the program to hang.
+
+3. Diagnosing Core Dump Issues
+- Core Dump File: Analyze the core dump file using tools like gdb to determine where the crash occurred.
+- Detailed Logs: Implement detailed logging to trace the execution flow and identify the last successful operation before the crash.
+- G Unit Tests: Write comprehensive unit tests to cover edge cases and ensure proper handling of resources.
+
+GDB (GNU Debugger) is a powerful tool for debugging applications written in languages such as C, C++,
+- Compile with Debugging Information - g++ -g -o my_program my_program.cpp
+- 2. Run Your Program
+Execute your program as usual. If it crashes, a core dump file will be generated (ensure your system is configured to create core dumps).
+- 3. Locate the Core Dump File
+Core dumps are usually generated in the current working directory or specified directory. The file is typically named core or core.<pid>, where <pid> is the process ID.
+4. Launch GDB with the Core Dump - gdb my_program core
+5. Backtrace (gdb) bt
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
